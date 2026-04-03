@@ -4,6 +4,9 @@ import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-defaulticon-compatibility';
 
+// Referencia para producción
+const Routing = (L as any).Routing;
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,9 +14,7 @@ import 'leaflet-defaulticon-compatibility';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
 export class AppComponent implements AfterViewInit {
-
   distancia = signal<string>('0 km');
   tiempo = signal<string>('0 min');
 
@@ -24,44 +25,45 @@ export class AppComponent implements AfterViewInit {
     this.initMap();
   }
 
-  private initMap(): void {
+  private initMap(): void {  
+
     // 1. Inicializar el mapa
     this.map = L.map(this.mapContainer.nativeElement).setView([40.4167, -3.7032], 13);
 
-    // 2. Añadir capa de OpenStreetMap
+    // 2. Capa de mapa
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
-    // 3. Configurar OSRM con Leaflet Routing Machine
-    const routingControl = L.Routing.control({
-      waypoints: [
-        L.latLng(40.4167, -3.7032), // Madrid (Origen)
-        L.latLng(40.4530, -3.6883)  // Santiago Bernabéu (Destino)
-      ],            
-      routeWhileDragging: true,
-      show: true,
-      addWaypoints: true
-    }).addTo(this.map);
+    // 3. Control de rutas
+    if (Routing) {
+      const routingControl = Routing.control({
+  waypoints: [
+    L.latLng(40.4167, -3.7032),
+    L.latLng(40.4530, -3.6883)
+  ],  
+  routeWhileDragging: true,
+  show: true,
+  addWaypoints: true
+}).addTo(this.map);
 
-    routingControl.on('routesfound', (e: any) => {
-      const routes = e.routes;
+      // Evento para actualizar distancia/tiempo
+      routingControl.on('routesfound', (e: any) => {    
+    const routes = e.routes;
+    if (routes && routes.length > 0) {
       const summary = routes[0].summary;
-    
-      // Convertir metros a km y segundos a minutos
       this.distancia.set((summary.totalDistance / 1000).toFixed(2) + ' km');
       this.tiempo.set(Math.round(summary.totalTime / 60) + ' min');
-    });
+    }
+  });
 
-    this.map.on('click', (e: L.LeafletMouseEvent) => {
-    routingControl.setWaypoints([
-      L.latLng(40.4167, -3.7032), // Mantenemos el origen fijo
-      e.latlng                    // El destino será donde hagas clic
-    ]);
-    });
+      // Evento de clic para cambiar destino
+      this.map.on('click', (e: L.LeafletMouseEvent) => {
+        routingControl.setWaypoints([
+          L.latLng(40.4167, -3.7032),
+          e.latlng
+        ]);
+      });
+    }
   }
-
-  
-
-
 }
