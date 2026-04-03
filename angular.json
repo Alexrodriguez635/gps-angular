@@ -37,11 +37,17 @@
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
+              "node_modules/leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css",
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.js",
+              "node_modules/leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.js"
+            ],
               "allowedCommonJsDependencies": [
-                "leaflet"                
+                "leaflet",
+                "leaflet-routing-machine"                
               ]
           },
           "configurations": {
@@ -49,13 +55,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "3MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "50kB",
+                  "maximumError": "100kB"
                 }
               ],
               "outputHashing": "all"

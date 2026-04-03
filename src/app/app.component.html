@@ -1,13 +1,17 @@
-<div style="position: relative;">
-  <div id="map" style="height: 500px;"></div>
+<div class="container">
+  <h1>Mi Trazador de Rutas con OSRM</h1>
 
-  @if (infoDistancia) {
-    <div style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
-      <strong>Resultado:</strong><br>
-      {{ infoDistancia }}
-      <br>
-      <button (click)="resetMap()" style="margin-top: 5px; cursor: pointer;">Limpiar</button>
-    </div>
-  }
+  <!-- Panel informativo -->
+  <div class="info-panel" style="margin-bottom: 10px; padding: 10px; background: #f0f0f0;">
+    <p><strong>Distancia total: {{ distancia() }}</strong> </p>
+    <p><strong>Tiempo estimado: {{ tiempo() }}</strong></p>
+  </div>
+  
+  <!-- Cambia #map por #mapContainer -->
+<div #mapContainer id="map" style="height: 500px; width: 100%; border: 1px solid #ccc;"></div>
+
+
+  <p>Angular 19 + Leaflet + OSRM</p>
 </div>
+
 <router-outlet />
