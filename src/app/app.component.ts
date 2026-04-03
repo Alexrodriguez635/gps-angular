@@ -41,7 +41,10 @@ export class AppComponent implements AfterViewInit {
   waypoints: [
     L.latLng(40.4167, -3.7032),
     L.latLng(40.4530, -3.6883)
-  ],  
+  ],
+  router: Routing.osrmv1({
+  serviceUrl: 'https://project-osrm.org' // ⬅️ URL COMPLETA
+}),  
   routeWhileDragging: true,
   show: true,
   addWaypoints: true
